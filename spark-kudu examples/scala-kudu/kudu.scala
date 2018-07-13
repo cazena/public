@@ -21,10 +21,10 @@ val kuduContext = new KuduContext(master, sc)
 // Step 2
 // val master# = "ip-##-###-##-###.cazena.internal:7051"
 //
-// Case 2: Step 2.5
+// Step 2.5
 // val kuduMasters = Seq(master1, master2, master#, ...).mkString(",")
 //
-// Case2: Step 3
+// Step 3
 // val kuduContext = new KuduContext(kuduMasters)
 
 // Step 4
@@ -56,4 +56,23 @@ kuduContext.createTable(kuduTableName, kuduTableSchema, kuduPrimaryKey, kuduTabl
 
 // PART 2: INSERT DATA
 
+// Step 1
+case class Customer(name:String, age:Int, city:String)
 
+// Step 2
+val customers = Array(Customer("name-1", 30, "city-1"), Customer("name-2", 18, "city-2"))
+
+// Step 3
+val customersRDD = sc.parallelize(customers)
+
+// Step 4
+val customersDF = spark.createDataFrame(customersRDD)
+
+// Step 5
+kuduContext.insertRows(df, kuduTableName) 
+
+// OPTIONAL: Step 6
+// val kuduOptions: Map[String, String] = Map("kudu.table"-> kuduTableName,"kudu.master" -> master)
+
+// OPTIONAL: Step 7
+// spark.read.options(kuduOptions).kudu.show()

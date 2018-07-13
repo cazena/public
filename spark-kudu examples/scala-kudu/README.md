@@ -99,3 +99,45 @@ Make sure the `scala.collection.JavaConverters._` has been imported (listed in S
 ```scala
 kuduContext.createTable(kuduTableName, kuduTableSchema, kuduPrimaryKey, kuduTableOptions)
 ```
+
+## Part 2: Insert Data
+
+### **Step 1**: Case Class
+Create a case class. Varies depending on the Schema created above. 
+```scala
+case class Customer(name:String, age:Int, city:String)
+```
+
+### **Step 2**: Create a list
+Using the case class made above, create a list of data.
+```scala
+val customers = Array(Customer("name-1", 30, "city-1"), Customer("name-2", 18, "city-2"))
+```
+
+### **Step 3**: Create an [RDD](https://www.tutorialspoint.com/apache_spark/apache_spark_rdd.htm)
+Now parallelize the list made above to make an RDD
+```scala
+val customersRDD = sc.parallelize(customers)
+```
+
+### **Step 4**: Convert RDD -> DataFrame
+Now convert the RDD from above into a DataFrame.
+```scala
+val customersDF = spark.createDataFrame(customersRDD)
+```
+
+### **Step 5**: Insert data
+```scala
+kuduContext.insertRows(df, kuduTableName)
+```
+
+### **Optional Step 6-7**:
+If you want to check if the data has been inserted, first create a kuduOptions:
+```scala
+val kuduOptions: Map[String, String] = Map("kudu.table"-> kuduTableName,"kudu.master" -> master)
+```
+Then read the table
+```scala
+spark.read.options(kuduOptions).kudu.show()
+```
+
