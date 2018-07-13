@@ -1,5 +1,9 @@
 # Scala & Kudu Example
 
+## Part 0: Kerberos
+
+Once you have used `ssh` to get in, use `$ kinit user` to gain permission. You will then be prompted to enter your password. Check using `$klist` to see if it's there
+
 ## Part 1: Setting Up the Table
 
 ### **Step 1:** Import dependencies
@@ -19,14 +23,19 @@ import org.apache.kudu.client.CreateTableOptions
 
 ### **Step 2:** Set up Kudu masters (1 master)
 
-If there is only 1 master, replace the `#` with the IP. If you have more than one master, look at the alternate steps below Step 3
+If there is only 1 master, replace the `#` with the IP, and the % should be the port (usually `7051`. If you have more than one master, look at the alternate steps below Step 3. 
 ```scala
-val master = "ip-##-###-##-###.cazena.internal:7051"
+val master = "ip-##-###-##-###.port:%%%%"
 ```
+If you are using Cazena, it will look something like this:
+```scala
+val master = "ip-10-134-55-734.cazena.internal:7051"
+```
+
 
 If there are *more than 1* masters than create multiple variables like below, replacing `#` with a different number for each master
 ```scala
-val master# = "ip-##-###-##-###.cazena.internal:7051"
+val master# = "ip-##-###-##-###.port:%%%%"
 ```
 
 ### **Step 3:** Create A KuduContext (1 master)
@@ -60,13 +69,14 @@ if (kuduContext.tableExists(kuduTableName)) {
 ```
 
 ### **Step 5**: Create the schema
-Enter as many fields as needed. Format goes `name, type, nullable?`. Types are SQL types and need to be imported induvidually
+Enter as many fields as needed. Format goes `name, type, nullable?`. Types are SQL types and need to be imported induvidually. You can find a list of DataTypes [here](https://spark.apache.org/docs/2.0.0/api/java/org/apache/spark/sql/types/DataTypes.html). You can import these by running `import org.apache.spark.sql.types.TYPE`
 ```scala
 val kuduTableSchema = StructType(
     StructField("name", StringType, false) ::
     StructField("age", IntegerType, true) ::
     StructField("city", StringType, true) :: Nil)
 ```
+The `Nil` means that the value will be empty when nothing is provided
 
 ### **Step 6**: Define the primary key
 The primary key matches one of the names in the schema
