@@ -4,7 +4,7 @@
 // Step 1
 // PART 1 IMPORTS
 // NOTE: Copy all the imports and paste it in.
-import scala.collection.JavaConverters._,import org.apache.spark._,org.apache.spark.SparkContext._,org.apache.kudu.spark.kudu._,org.apache.spark.sql.types.StructType,org.apache.spark.sql.types.StructField,org.apache.spa rk.sql.types.StringType,org.apache.spark.sql.types.IntegerType,org.apache.kudu.client.CreateTableOptions,org.apache.spark.sql.SQLContext
+import scala.collection.JavaConverters._,import org.apache.spark._,org.apache.spark.SparkContext._,org.apache.kudu.spark.kudu._,org.apache.spark.sql.types.StructType,org.apache.spark.sql.types.StructField,org.apache.spark.sql.types.StringType,org.apache.spark.sql.types.IntegerType,org.apache.kudu.client.CreateTableOptions,org.apache.spark.sql.SQLContext
 // PART 2.5 import is the last import ^^^
 
 // Step 2
