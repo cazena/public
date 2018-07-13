@@ -178,7 +178,7 @@ customersDF.registerTempTable("customers")
 ### **Step 2:** Filter Dataframe
 Filter and create a new dataframe that only has the keys that will be deleted
 ```scala
-val deleteKeysDF = sqlContext.sql("select name from customer where age >20")
+val deleteKeysDF = sqlContext.sql("select name from customers where age >20")
 ```
 
 ### **Step 3:** Delete the rows
