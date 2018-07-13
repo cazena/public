@@ -1,10 +1,15 @@
-# Scala & Kudu Example
+# Scala & Kudu
 
 ## Part 0: Kerberos
 
 Once you have used `ssh` to get in, use `$ kinit user` to gain permission. You will then be prompted to enter your password. Check using `$klist` to see if it's there
 
+---
+
 ## Part 1: Setting Up the Table
+
+### **Step 0:** If table is already setup
+If the table is setup and you are in a new spark session, you don't need to finish all of Part 1 to move on. You only need to do steps 1, 2, 3, and 4. Then move on.
 
 ### **Step 1:** Import dependencies
 
@@ -100,6 +105,17 @@ Make sure the `scala.collection.JavaConverters._` has been imported (listed in S
 kuduContext.createTable(kuduTableName, kuduTableSchema, kuduPrimaryKey, kuduTableOptions)
 ```
 
+---
+
+## Part 1.5: KuduOptions
+
+This step is required for most of the following parts. Create a kuduOptions
+```scala
+val kuduOptions: Map[String, String] = Map("kudu.table"-> kuduTableName,"kudu.master" -> master)
+```
+
+---
+
 ## Part 2: Insert Data
 
 ### **Step 1**: Case Class
@@ -131,13 +147,13 @@ val customersDF = spark.createDataFrame(customersRDD)
 kuduContext.insertRows(df, kuduTableName)
 ```
 
-### **Optional Step 6-7**:
-If you want to check if the data has been inserted, first create a kuduOptions:
-```scala
-val kuduOptions: Map[String, String] = Map("kudu.table"-> kuduTableName,"kudu.master" -> master)
-```
-Then read the table
+### **Optional Step 6**:
+To read the table, do the following
 ```scala
 spark.read.options(kuduOptions).kudu.show()
 ```
+
+
+
+
 

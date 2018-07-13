@@ -54,6 +54,10 @@ kuduTableOptions.setRangePartitionColumns(List("name").asJava).setNumReplicas(3)
 // Step 9
 kuduContext.createTable(kuduTableName, kuduTableSchema, kuduPrimaryKey, kuduTableOptions)
 
+// PART 1.5: KuduOptions
+// val kuduOptions: Map[String, String] = Map("kudu.table"-> kuduTableName,"kudu.master" -> master)
+
+
 // PART 2: INSERT DATA
 
 // Step 1
@@ -72,7 +76,4 @@ val customersDF = spark.createDataFrame(customersRDD)
 kuduContext.insertRows(df, kuduTableName) 
 
 // OPTIONAL: Step 6
-// val kuduOptions: Map[String, String] = Map("kudu.table"-> kuduTableName,"kudu.master" -> master)
-
-// OPTIONAL: Step 7
 // spark.read.options(kuduOptions).kudu.show()
