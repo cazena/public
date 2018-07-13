@@ -17,7 +17,7 @@ If the table is setup and you are in a new spark session, you don't need to fini
 
 ### **Step 1:** Import dependencies
 
-Import all the following dependences to create be able to create a table:
+Import all the following dependences to create a table:
 ```scala
 import scala.collection.JavaConverters._
 import org.apache.spark._
@@ -32,7 +32,7 @@ import org.apache.kudu.client.CreateTableOptions
 
 ### **Step 2:** Set up Kudu masters (1 master)
 
-If there is only 1 master, replace the `#` with the IP, and the % should be the port (usually `7051`. If you have more than one master, look at the alternate steps below Step 3. 
+If there is only 1 master, replace the 'kudu-master-dns' with the IP, and the 'kudu-master-port' should be the port (usually `7051`. If you have more than one master, look at the alternate steps below Step 3. 
 ```scala
 val master="kudu-master-dns:kudu-master-port"
 ```
@@ -44,7 +44,7 @@ val master = "ip-10-134-55-734.cazena.internal:7051"
 
 If there are *more than 1* masters than create multiple variables like below, replacing `#` with a different number for each master
 ```scala
-val master# = "ip-##-###-##-###.port:%%%%"
+val master# = "kudu-master-dns:kudu-master-port"
 ```
 
 ### **Step 3:** Create A KuduContext (1 master)
@@ -70,7 +70,7 @@ var kuduTableName = "insert-name-here"
 ```
 
 ### **Optional Step 4.5**: Check for exisiting table
-Check if the table already exsists, and if so delete it
+Check if the table already exists, and if so delete it
 ```scala
 if (kuduContext.tableExists(kuduTableName)) {
      kuduContext.deleteTable(kuduTableName)
@@ -78,7 +78,7 @@ if (kuduContext.tableExists(kuduTableName)) {
 ```
 
 ### **Step 5**: Create the schema
-Enter as many fields as needed. Format goes `name, type, nullable?`. Types are SQL types and need to be imported induvidually. You can find a list of DataTypes [here](https://kudu.apache.org/releases/0.6.0/docs/schema_design.html). You can import these by running `import org.apache.spark.sql.types.TYPE`
+Enter as many fields as needed. The format is `name, type, nullable?`. Types are SQL types and need to be imported individually. You can find a list of DataTypes [here](https://kudu.apache.org/releases/0.6.0/docs/schema_design.html). You can import these by running `import org.apache.spark.sql.types.TYPE`
 ```scala
 val kuduTableSchema = StructType(
     StructField("name", StringType, false) ::
