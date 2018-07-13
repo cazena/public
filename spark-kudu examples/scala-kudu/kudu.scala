@@ -12,7 +12,7 @@ import org.apache.spa rk.sql.types.StringType
 import org.apache.spark.sql.types.IntegerType
 import org.apache.kudu.client.CreateTableOptions
 
-// PART 3 IMPORTS
+// PART 2.5 IMPORTS
 import org.apache.spark.sql.SQLContext
 
 // Step 2
@@ -83,7 +83,7 @@ kuduContext.insertRows(df, kuduTableName) 
 // spark.read.options(kuduOptions).kudu.show()
 
 // PART 2.5: SQLContext
-// Import is at the top under `PART 3 IMPORTS`
+// Import is at the top under `PART 2.5 IMPORTS`
 val sqlContext = new SQLContext(sc)
 
 // PART 3: Deleting Data
