@@ -96,7 +96,7 @@ val newAndChangedCustomers = Array(Customer("name-3", 25, "chicago"), Customer("
 val newAndChangedRDD = sc.parallelize(newAndChangedCustomers)
 
 // Step 3
-val newAndChangedDF = spark.createDataFrame(NewAndChangedRDD)
+val newAndChangedDF = spark.createDataFrame(newAndChangedRDD)
 
 // Step 4
 kuduContext.upsertRows(newAndChangedDF, kuduTableName)
