@@ -99,3 +99,24 @@ kuduContext.deleteRows(deleteKeyasDF, kuduTableName)
 
 // Optional Step 4
 // sqlContext.read.options(kuduOptions).kudu.show
+
+// PART 4: Upsert Data
+
+// Step 1
+val newAndChangedCustomers = Array(
+    Customer("name-3", 25, "chicago"),
+    Customer("name-4", 40, "winnipeg"),
+    Customer("jordan", 19, "toronto")
+)
+
+// Step 2
+val newAndChangedRDD = sc.parallelize(newAndChangedCustomers)
+
+// Step 3
+val newAndChangedDF = spark.createDataFrame(NewAndChangedRDD)
+
+// Step 4
+kuduContext.upsertRows(newAndChangedDF, kuduTableName)
+
+// Optional Step 5
+// sqlContext.read.options(kuduOptions).kudu.show

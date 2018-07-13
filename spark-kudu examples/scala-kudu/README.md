@@ -1,5 +1,7 @@
 # Scala & Kudu
 
+Adapted from [here](https://blog.cloudera.com/blog/2017/02/up-and-running-with-apache-spark-on-apache-kudu/)
+
 ## Part 0: Kerberos
 
 Once you have used `ssh` to get in, use `$ kinit user` to gain permission. You will then be prompted to enter your password. Check using `$klist` to see if it's there
@@ -184,6 +186,42 @@ kuduContext.deleteRows(deleteKeysDF, kuduTableName)
 ```
 
 ### **Optional Step 4**: Read the table
+To read the table, do the following
+```scala
+sqlContext.read.options(kuduOptions).kudu.show
+```
+
+## Part 4: Upsert Data
+
+### **Step 1:** Create new dataset
+Create a new dataset with all the data that needs to be upserted. In this case, the Customer class from Part 1 is used.
+```scala
+val newAndChangedCustomers = Array(
+    Customer("name-3", 25, "chicago"),
+    Customer("name-4", 40, "winnipeg"),
+    Customer("jordan", 19, "toronto")
+)
+```
+
+### **Step 2:** Create an RDD
+Parallelize the dataset to make an RDD
+```scala
+val newAndChangedRDD = sc.parallelize(newAndChangedCustomers)
+```
+
+### **Step 3:** RDD -> DataFrame
+Convert the RDD from above into a dataframe
+```scala
+val newAndChangedDF = spark.createDataFrame(NewAndChangedRDD)
+```
+
+### **Step 4:** Upsert the Data
+Now upsert the data
+```scala
+kuduContext.upsertRows(newAndChangedDF, kuduTableName)
+```
+
+### **Optional Step 5**: Read the table
 To read the table, do the following
 ```scala
 sqlContext.read.options(kuduOptions).kudu.show
