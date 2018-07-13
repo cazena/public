@@ -165,6 +165,8 @@ Next you must set up the object
 val sqlContext = new SQLContext(sc)
 ```
 
+---
+
 ## Part 3: Delete Data
 
 ### **Step 1:** Register temporary table
@@ -190,6 +192,8 @@ To read the table, do the following
 ```scala
 sqlContext.read.options(kuduOptions).kudu.show
 ```
+
+---
 
 ## Part 4: Upsert Data
 
@@ -227,5 +231,36 @@ To read the table, do the following
 sqlContext.read.options(kuduOptions).kudu.show
 ```
 
+---
 
+## Part 5: Update Data
 
+### **Step 1**: Create the dataset
+Create a new dataset with an updated version of the row that is being updated
+```scala
+val modifiedCustomers = Array(Customer("name-5", 25, "chicago"))
+```
+
+### **Step 2:** Create an RDD
+Parallelize the dataset to make an RDD
+```scala
+val modifiedCustomersRDD = sc.parallelize(modifiedCustomers)
+```
+
+### **Step 3:** RDD -> DataFrame
+Convert the RDD from above into a dataframe
+```scala
+val modifiedCustomersDF = spark.createDataFrame(modifiedCustomersRDD)
+```
+
+### **Step 4:** Update the Rows
+Now update the row
+```scala
+kuduContext.updateRows(modifiedCustomersDF, kuduTableName)
+```
+
+### **Optional Step 5**: Read the table
+To read the table, do the following
+```scala
+sqlContext.read.options(kuduOptions).kudu.show
+```
