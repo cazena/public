@@ -90,8 +90,7 @@ kuduContext.deleteRows(deleteKeyasDF, kuduTableName)
 // PART 4: Upsert Data
 
 // Step 1
-val newAndChangedCustomers = Array(Customer("name-3", 25, "chicago"), Customer("name-4", 40, "winnipeg"), Customer("name-5", 19, "toronto")
-)
+val newAndChangedCustomers = Array(Customer("name-3", 25, "chicago"), Customer("name-4", 40, "winnipeg"), Customer("name-5", 19, "toronto"))
 
 // Step 2
 val newAndChangedRDD = sc.parallelize(newAndChangedCustomers)
