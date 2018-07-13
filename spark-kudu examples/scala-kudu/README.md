@@ -216,7 +216,7 @@ val newAndChangedRDD = sc.parallelize(newAndChangedCustomers)
 ### **Step 3:** RDD -> DataFrame
 Convert the RDD from above into a dataframe
 ```scala
-val newAndChangedDF = spark.createDataFrame(NewAndChangedRDD)
+val newAndChangedDF = spark.createDataFrame(newAndChangedRDD)
 ```
 
 ### **Step 4:** Upsert the Data
