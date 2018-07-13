@@ -10,6 +10,8 @@ Once you have used `ssh` to get in, use `$ kinit user` to gain permission. You w
 
 ## Part 1: Setting Up the Table
 
+The following instructions will work either as a scala script running in spark2 or in the spark2 shell.
+
 ### **Step 0:** If table is already setup
 If the table is setup and you are in a new spark session, you don't need to finish all of Part 1 to move on. You only need to do steps 1, 2, 3, and 4. Then move on.
 
@@ -32,7 +34,7 @@ import org.apache.kudu.client.CreateTableOptions
 
 If there is only 1 master, replace the `#` with the IP, and the % should be the port (usually `7051`. If you have more than one master, look at the alternate steps below Step 3. 
 ```scala
-val master = "ip-##-###-##-###.port:%%%%"
+val master="kudu-master-dns:kudu-master-port"
 ```
 If you are using Cazena, it will look something like this:
 ```scala
@@ -76,7 +78,7 @@ if (kuduContext.tableExists(kuduTableName)) {
 ```
 
 ### **Step 5**: Create the schema
-Enter as many fields as needed. Format goes `name, type, nullable?`. Types are SQL types and need to be imported induvidually. You can find a list of DataTypes [here](https://spark.apache.org/docs/2.0.0/api/java/org/apache/spark/sql/types/DataTypes.html). You can import these by running `import org.apache.spark.sql.types.TYPE`
+Enter as many fields as needed. Format goes `name, type, nullable?`. Types are SQL types and need to be imported induvidually. You can find a list of DataTypes [here](https://kudu.apache.org/releases/0.6.0/docs/schema_design.html). You can import these by running `import org.apache.spark.sql.types.TYPE`
 ```scala
 val kuduTableSchema = StructType(
     StructField("name", StringType, false) ::
@@ -120,7 +122,7 @@ val kuduOptions: Map[String, String] = Map("kudu.table"-> kuduTableName,"kudu.ma
 
 ## Part 2: Insert Data
 
-### **Step 1**: Case Class
+### **Step 1**: Define a Case Class
 Create a case class. Varies depending on the Schema created above. 
 ```scala
 case class Customer(name:String, age:Int, city:String)
