@@ -4,7 +4,7 @@ Adapted from [here](https://blog.cloudera.com/blog/2017/02/up-and-running-with-a
 
 ## Part 0: Kerberos
 
-This part only applies if you are using kerberos enabled spark & kudu system. Use `$ kinit user` to gain permission with your ticket granting ticket (TGT). You will then be prompted to enter your password. Check using `$klist` to see if the TGT is there.
+This part only applies if you are usinag  kerberos enabled spark & kudu system. Use `$ kinit user` to gain permission with your ticket granting ticket (TGT). You will then be prompted to enter your password. Check using `$klist` to see if the TGT is there.
 
 ---
 
