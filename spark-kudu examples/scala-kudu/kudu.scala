@@ -1,6 +1,7 @@
 // PART 1: SET UP TABLE
 
 // Step 1
+// PART 1 IMPORTS
 import scala.collection.JavaConverters._
 import org.apache.spark._
 import org.apache.spark.SparkContext._
@@ -10,6 +11,9 @@ import org.apache.spark.sql.types.StructField
 import org.apache.spa rk.sql.types.StringType
 import org.apache.spark.sql.types.IntegerType
 import org.apache.kudu.client.CreateTableOptions
+
+// PART 3 IMPORTS
+import org.apache.spark.sql.SQLContext
 
 // Step 2
 val master = "ip-##-###-##-###.cazena.internal:7051"
@@ -55,7 +59,7 @@ kuduTableOptions.setRangePartitionColumns(List("name").asJava).setNumReplicas(3)
 kuduContext.createTable(kuduTableName, kuduTableSchema, kuduPrimaryKey, kuduTableOptions)
 
 // PART 1.5: KuduOptions
-// val kuduOptions: Map[String, String] = Map("kudu.table"-> kuduTableName,"kudu.master" -> master)
+val kuduOptions: Map[String, String] = Map("kudu.table"-> kuduTableName,"kudu.master" -> master)
 
 
 // PART 2: INSERT DATA
@@ -77,3 +81,21 @@ kuduContext.insertRows(df, kuduTableName) 
 
 // OPTIONAL: Step 6
 // spark.read.options(kuduOptions).kudu.show()
+
+// PART 2.5: SQLContext
+// Import is at the top under `PART 3 IMPORTS`
+val sqlContext = new SQLContext(sc)
+
+// PART 3: Deleting Data
+
+// Step 1
+customersDF.registerTempTable("customers")
+
+// Step 2
+val deleteKeysDF = sqlContext.sql("select name from customers where age > 20")
+
+// Step 3
+kuduContext.deleteRows(deleteKeyasDF, kuduTableName)
+
+// Optional Step 4
+// sqlContext.read.options(kuduOptions).kudu.show

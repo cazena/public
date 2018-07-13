@@ -21,7 +21,7 @@ import org.apache.spark.SparkContext._
 import org.apache.kudu.spark.kudu._
 import org.apache.spark.sql.types.StructType
 import org.apache.spark.sql.types.StructField
-import org.apache.spa rk.sql.types.StringType
+import org.apache.spark.sql.types.StringType
 import org.apache.spark.sql.types.IntegerType
 import org.apache.kudu.client.CreateTableOptions
 ```
@@ -91,7 +91,7 @@ val kuduPrimaryKey = Seq("name")
 
 ### **Step 7**: Create a a new table option
 ```scala
-val kuduTableOptions = new CreateTableOption()
+val kuduTableOptions = new CreateTableOptions()
 ```
 
 ### **Step 8**: Set the table options
@@ -144,16 +144,50 @@ val customersDF = spark.createDataFrame(customersRDD)
 
 ### **Step 5**: Insert data
 ```scala
-kuduContext.insertRows(df, kuduTableName)
+kuduContext.insertRows(customersDF, kuduTableName)
 ```
 
-### **Optional Step 6**:
+### **Optional Step 6**: Read the table
 To read the table, do the following
 ```scala
 spark.read.options(kuduOptions).kudu.show()
 ```
 
+## Part 2.5: SQLContext
+To move any further, SQLContext must be set up. First import the package:
+```scala
+import org.apache.spark.sql.SQLContext
+```
+Next you must set up the object
+```scala
+val sqlContext = new SQLContext(sc)
+```
 
+## Part 3: Delete Data
+
+### **Step 1:** Register temporary table
+Register the dataframe as a temporary table
+```scala
+customersDF.registerTempTable("customers")
+```
+
+### **Step 2:** Filter Dataframe
+Filter and create a new dataframe that only has the keys that will be deleted
+```scala
+val deleteKeysDF = sqlContext.sql("select name from customer where age >20")
+```
+
+### **Step 3:** Delete the rows
+Now delete the rows
+```scala
+kuduContext.deleteRows(deleteKeysDF, kuduTableName)
+```
+
+### **Optional Step 4**: Read the table
+To read the table, do the following
+```scala
+sqlContext.read.options(kuduOptions).kudu.show
+```
 
 
 
