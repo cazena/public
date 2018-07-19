@@ -37,7 +37,7 @@ val kuduTableSchema = StructType( StructField("name", StringType, false) :: Stru
 val kuduPrimaryKey = Seq("name")
 
 // Step 7
-val kuduTableOptions = new CreateTableOption()
+val kuduTableOptions = new CreateTableOptions()
 
 // Step 8
 kuduTableOptions.setRangePartitionColumns(List("name").asJava).setNumReplicas(3)
