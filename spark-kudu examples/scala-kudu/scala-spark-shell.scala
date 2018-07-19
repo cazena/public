@@ -64,7 +64,7 @@ val customersRDD = sc.parallelize(customers)
 val customersDF = spark.createDataFrame(customersRDD)
 
 // Step 5
-kuduContext.insertRows(df, kuduTableName) 
+kuduContext.insertRows(customersDF, kuduTableName) 
 
 // OPTIONAL: Step 6
 // spark.read.options(kuduOptions).kudu.show()
