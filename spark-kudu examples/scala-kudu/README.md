@@ -68,7 +68,7 @@ var kuduTableName = "insert-name-here"
 ```
 
 ### **Optional Step 4.5**: Check for exisiting table
-Check if the table already exsists, and if so delete it
+Check if the table already exists, and if so delete it
 ```scala
 if (kuduContext.tableExists(kuduTableName)) {
      kuduContext.deleteTable(kuduTableName)
