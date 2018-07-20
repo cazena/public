@@ -7,14 +7,15 @@ One example use case is documented below which submits scala application using t
 
 In order to use Livy rest API on a Cazena system, first get the URL for the Livy rest API from the Cloud Sockets page on the console.
 
-## Grab Livy Rest API URL from the cloud sockets page, it should be something like
-cloudera-manager.ip1iorfujyohfqss.cazena.internal:8443/gateway/cazena/livy/v1
+### Grab Livy Rest API URL from the cloud sockets page, it should be something like
+http://cloudera-manager.ip1iorfujyohfqss.cazena.internal:8443/gateway/cazena/livy/v1
 
-## Here we are using /batches endpoint, so append this endpoint to above URL.
+### Here we are using /batches endpoint, so append this endpoint to above URL.
 
-## Now our final URL to make http post request becomes http://cloudera-manager.ip1iorfujyohfqss.cazena.internal:8443/gateway/cazena/livy/v1/batches.
+### Now our final URL to make http post request becomes:
+http://cloudera-manager.ip1iorfujyohfqss.cazena.internal:8443/gateway/cazena/livy/v1/batches.
 
-## Make http post request as follows:
+### Make http post request as follows:
 
 ```bash
 Request type: POST
