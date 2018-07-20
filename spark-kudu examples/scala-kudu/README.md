@@ -267,6 +267,8 @@ sqlContext.read.options(kuduOptions).kudu.show
 
 ## **Part 6**: Alter Kudu Table
 
+**Note**: If the kudu table is already linked to a Impala tabe, then the Impala table will update itself automatically. If your table has not been linked and you would like it so, check part 5.5 above.
+
 ### Step 1: Import Dependencies
 The following dependencies are required upon the dependencies listed at the top
 ```scala
@@ -305,4 +307,4 @@ client.alterTable(kuduTableName, new AlterTableOptions()
     .addNullableColumn("addNullable", Type.INT32)
 )
 ```
-The types that you can use are listed [here](https://www.cloudera.com/documentation/enterprise/5-14-x/topics/kudu_schema_design.html)
+The types that you can use are listed [here](https://www.cloudera.com/documentation/enterprise/5-14-x/topics/kudu_schema_design.html).
