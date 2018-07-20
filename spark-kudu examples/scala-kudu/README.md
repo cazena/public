@@ -76,7 +76,7 @@ if (kuduContext.tableExists(kuduTableName)) {
 ```
 
 ### **Step 5**: Create the schema
-Enter as many fields as needed. Format goes `name, type, nullable?`. Types are SQL types and need to be imported induvidually. You can find a list of DataTypes [here](https://spark.apache.org/docs/2.0.0/api/java/org/apache/spark/sql/types/DataTypes.html). You can import these by running `import org.apache.spark.sql.types.TYPE`
+Enter as many fields as needed. The format is `name, type, nullable?`. Types are SQL types and need to be imported induvidually. You can find a list of DataTypes [here](https://spark.apache.org/docs/2.0.0/api/java/org/apache/spark/sql/types/DataTypes.html). You can import these by running `import org.apache.spark.sql.types.TYPE`
 ```scala
 val kuduTableSchema = StructType(
     StructField("name", StringType, false) ::
