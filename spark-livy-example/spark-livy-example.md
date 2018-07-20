@@ -7,15 +7,19 @@ One example use case is documented below which submits scala application using t
 
 In order to use Livy rest API on a Cazena system, first get the URL for the Livy rest API from the Cloud Sockets page on the console.
 
-### Grab Livy Rest API URL from the cloud sockets page, it should be something like
+### 1) Generate the Livy Rest API URL 
+
+From the Cloud Sockets page of the Cazena Console, it should be something like
 http://cloudera-manager.ip1iorfujyohfqss.cazena.internal:8443/gateway/cazena/livy/v1
 
-### Here we are using /batches endpoint, so append this endpoint to above URL.
+Here we are using the /batches endpoint; append this path to the above URL.
 
-### Now our final URL to make http post request becomes:
-http://cloudera-manager.ip1iorfujyohfqss.cazena.internal:8443/gateway/cazena/livy/v1/batches.
+Now our final URL to make http post request becomes:
+http://cloudera-manager.ip1iorfujyohfqss.cazena.internal:8443/gateway/cazena/livy/v1/batches
 
-### Make http post request as follows:
+### 2) Submit the job to Livy
+
+Method 1: Submit an http post request by inputting the following information in to a client such as Postman:
 
 ```bash
 Request type: POST
@@ -26,9 +30,9 @@ Data:
 {"className":"org.apache.spark.examples.SparkPi", "file": "<hdfs path of example jar file>", "proxyUser":""}
 ```
 
-Note: Here proxyUser key with null/any value is necessary in the JSON data.
+Note: Here proxyUser key with a null value is necessary in the JSON data.
 
-The below curl command can be used to make this request:
+Method 2: below curl command can be used to make this request:
 
 ```bash
 curl -i -k -u <username>:<password> -X POST -H 'Content-Type: application/json' 'http://cloudera-manager.ip1iorfujyohfqss.cazena.internal:8443/gateway/cazena/livy/v1/batches' --data '
