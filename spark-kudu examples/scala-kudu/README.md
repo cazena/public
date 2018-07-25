@@ -30,7 +30,7 @@ import org.apache.kudu.client.CreateTableOptions
 
 ### **Step 2:** Set up Kudu masters (1 master)
 
-If there is only 1 master, replace the `#` with the IP, and the % should be the port (usually `7051`. If you have more than one master, look at the alternate steps below Step 3.
+If there is only 1 master, replace the `#` with the IP, and the % should be the port (usually `7051`. If you have more than one master, look at the alternate steps below Step 3. 
 ```scala
 val master = "ip-##-###-##-###.port:%%%%"
 ```
@@ -76,7 +76,7 @@ if (kuduContext.tableExists(kuduTableName)) {
 ```
 
 ### **Step 5**: Create the schema
-Enter as many fields as needed. The format is `name, type, nullable?`. Types are SQL types and need to be imported individually. You can find a list of DataTypes [here](https://spark.apache.org/docs/2.0.0/api/java/org/apache/spark/sql/types/DataTypes.html). You can import these by running `import org.apache.spark.sql.types.TYPE`
+Enter as many fields as needed. The format is `name, type, nullable?`. Types are SQL types and need to be imported induvidually. You can find a list of DataTypes [here](https://spark.apache.org/docs/2.0.0/api/java/org/apache/spark/sql/types/DataTypes.html). You can import these by running `import org.apache.spark.sql.types.TYPE`
 ```scala
 val kuduTableSchema = StructType(
     StructField("name", StringType, false) ::
@@ -121,7 +121,7 @@ val kuduOptions: Map[String, String] = Map("kudu.table"-> kuduTableName,"kudu.ma
 ## Part 2: Insert Data
 
 ### **Step 1**: Case Class
-Create a case class. Varies depending on the Schema created above.
+Create a case class. Varies depending on the Schema created above. 
 ```scala
 case class Customer(name:String, age:Int, city:String)
 ```

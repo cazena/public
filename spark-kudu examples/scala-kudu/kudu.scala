@@ -50,7 +50,7 @@ val kuduTableSchema = StructType(
 val kuduPrimaryKey = Seq("name")
 
 // Step 7
-val kuduTableOptions = new CreateTableOptions()
+val kuduTableOptions = new CreateTableOption()
 
 // Step 8
 kuduTableOptions.setRangePartitionColumns(List("name").asJava).setNumReplicas(3)
@@ -77,7 +77,7 @@ val customersRDD = sc.parallelize(customers)
 val customersDF = spark.createDataFrame(customersRDD)
 
 // Step 5
-kuduContext.insertRows(customersDF, kuduTableName) 
+kuduContext.insertRows(df, kuduTableName) 
 
 // OPTIONAL: Step 6
 // spark.read.options(kuduOptions).kudu.show()
