@@ -82,7 +82,7 @@ customersDF.registerTempTable("customers")
 val deleteKeysDF = sqlContext.sql("select name from customers where age > 20")
 
 // Step 3
-kuduContext.deleteRows(deleteKeyasDF, kuduTableName)
+kuduContext.deleteRows(deleteKeysDF, kuduTableName)
 
 // Optional Step 4
 // sqlContext.read.options(kuduOptions).kudu.show
