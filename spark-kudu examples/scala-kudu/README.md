@@ -2,9 +2,18 @@
 
 Adapted from [here](https://blog.cloudera.com/blog/2017/02/up-and-running-with-apache-spark-on-apache-kudu/)
 
-## Part 0: Kerberos
+## Part 0: Kerberos & Spark-Shell
 
 Once you have used `ssh` to get in, use `$ kinit user` to gain permission. You will then be prompted to enter your password. Check using `$klist` to see if it's there
+
+To start up the spark-shell, use the following command:
+```
+spark2-shell \
+  --packages org.apache.kudu:kudu-spark2_2.11:1.6.0 \
+  --conf spark.driver.allowMultipleContexts=true
+```
+
+That will automatically import certain dependencies.
 
 ---
 
@@ -274,6 +283,7 @@ The following dependencies are required upon the dependencies listed at the top
 ```scala
 import org.apache.kudu.client.KuduClient
 import org.apache.kudu.client.AlterTableOptions
+import org.apache.kudu.Type
 ```
 
 ### Step 2: Create a new Kudu Client
@@ -286,7 +296,7 @@ val client = new KuduClient.KuduClientBuilder("master-ip").defaultAdminOperation
 ```
 
 ### **Step 3:** Create object for defaultVal
-One of `AlterTableOption()`'s parameters is defaultVal. To supply this, create an objec:
+One of `AlterTableOption()`'s parameters is defaultVal, or default value. This will be inserted as the default value when you add the table. In this case, it's a long 0.To supply this, create an object:
 ```scala
 val o = 0l;
 ```
@@ -307,4 +317,10 @@ client.alterTable(kuduTableName, new AlterTableOptions()
     .addNullableColumn("addNullable", Type.INT32)
 )
 ```
-The types that you can use are listed [here](https://www.cloudera.com/documentation/enterprise/5-14-x/topics/kudu_schema_design.html).
+The types that you can use are listed [here](https://kudu.apache.org/apidocs/org/apache/kudu/Type.html).
+
+### **Optional Step 5**: Read the table
+To read the table, do the following:
+```scala
+spark.read.options(kuduOptions).kudu.show()
+```

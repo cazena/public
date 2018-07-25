@@ -120,3 +120,19 @@ kuduContext.updateRows(modifiedCustomersDF, kuduTableName)
 
 // Optional Step 5
 // sqlContext.read.options(kuduOptions).kudu.show
+
+// PART 6: Alter Table
+// Step 1
+import org.apache.kudu.client.KuduClient, org.apache.kudu.client.AlterTableOptions, org.apache.kudu.Type
+
+// Step 2
+val client = new KuduClient.KuduClientBuilder("master-ip").defaultAdminOperationTimeoutMs(600000).build()
+
+// Step 3
+val o = 0l;
+
+// Step 4
+client.alterTable(kuduTableName, new AlterTableOptions().addColumn("column-name", type, o))
+
+// Optional Step 5
+// sqlContext.read.options(kuduOptions).kudu.show
