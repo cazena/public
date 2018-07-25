@@ -4,7 +4,7 @@ Adapted from [here](https://blog.cloudera.com/blog/2017/02/up-and-running-with-a
 
 ## Part 0: Kerberos & Spark-Shell
 
-Once you have used `ssh` to get in, use `$ kinit user` to gain permission. You will then be prompted to enter your password. Check using `$klist` to see if it's there
+This part only applies if you are using a kerberos enabled spark & kudu system. Use `$ kinit user` to gain permission with your ticket-granting ticket (TGT). You will then be prompted to enter your password. Check using `$klist` to see if the TGT is there.
 
 To start up the spark-shell, use the following command:
 ```
@@ -39,9 +39,9 @@ import org.apache.kudu.client.CreateTableOptions
 
 ### **Step 2:** Set up Kudu masters (1 master)
 
-If there is only 1 master, replace the `#` with the IP, and the % should be the port (usually `7051`. If you have more than one master, look at the alternate steps below Step 3.
+If there is only 1 master, replace the `kudu-master-dns` with the IP, and the `kudu-master-port` should be the port (usually `7051`. If you have more than one master, look at the alternate steps below Step 3.
 ```scala
-val master = "ip-##-###-##-###.port:%%%%"
+val master = "kudu-master-dns:kudu-master-port"
 ```
 If you are using Cazena, it will look something like this:
 ```scala
@@ -85,7 +85,7 @@ if (kuduContext.tableExists(kuduTableName)) {
 ```
 
 ### **Step 5**: Create the schema
-Enter as many fields as needed. The format is `name, type, nullable?`. Types are SQL types and need to be imported individually. You can find a list of DataTypes [here](https://spark.apache.org/docs/2.0.0/api/java/org/apache/spark/sql/types/DataTypes.html). You can import these by running `import org.apache.spark.sql.types.TYPE`
+Enter as many fields as needed. The format is `name, type, nullable?`. Types are SQL types and need to be imported individually. You can find a list of DataTypes [here](https://kudu.apache.org/releases/0.6.0/docs/schema_design.html). You can import these by running `import org.apache.spark.sql.types.TYPE`
 ```scala
 val kuduTableSchema = StructType(
     StructField("name", StringType, false) ::
@@ -129,7 +129,7 @@ val kuduOptions: Map[String, String] = Map("kudu.table"-> kuduTableName,"kudu.ma
 
 ## Part 2: Insert Data
 
-### **Step 1**: Case Class
+### **Step 1**: Define a Case Class
 Create a case class. Varies depending on the Schema created above.
 ```scala
 case class Customer(name:String, age:Int, city:String)
@@ -187,7 +187,7 @@ customersDF.registerTempTable("customers")
 ### **Step 2:** Filter Dataframe
 Filter and create a new dataframe that only has the keys that will be deleted
 ```scala
-val deleteKeysDF = sqlContext.sql("select name from customer where age >20")
+val deleteKeysDF = sqlContext.sql("select name from customers where age >20")
 ```
 
 ### **Step 3:** Delete the rows
@@ -225,7 +225,7 @@ val newAndChangedRDD = sc.parallelize(newAndChangedCustomers)
 ### **Step 3:** RDD -> DataFrame
 Convert the RDD from above into a dataframe
 ```scala
-val newAndChangedDF = spark.createDataFrame(NewAndChangedRDD)
+val newAndChangedDF = spark.createDataFrame(newAndChangedRDD)
 ```
 
 ### **Step 4:** Upsert the Data
