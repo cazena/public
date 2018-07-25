@@ -82,7 +82,7 @@ customersDF.registerTempTable("customers")
 val deleteKeysDF = sqlContext.sql("select name from customers where age > 20")
 
 // Step 3
-kuduContext.deleteRows(deleteKeyasDF, kuduTableName)
+kuduContext.deleteRows(deleteKeysDF, kuduTableName)
 
 // Optional Step 4
 // sqlContext.read.options(kuduOptions).kudu.show
@@ -117,6 +117,22 @@ val modifiedCustomersDF = spark.createDataFrame(modifiedCustomersRDD)
 
 // Step 4
 kuduContext.updateRows(modifiedCustomersDF, kuduTableName)
+
+// Optional Step 5
+// sqlContext.read.options(kuduOptions).kudu.show
+
+// PART 6: Alter Table
+// Step 1
+import org.apache.kudu.client.KuduClient, org.apache.kudu.client.AlterTableOptions, org.apache.kudu.Type
+
+// Step 2
+val client = new KuduClient.KuduClientBuilder("master-ip").defaultAdminOperationTimeoutMs(600000).build()
+
+// Step 3
+val o = 0l;
+
+// Step 4
+client.alterTable(kuduTableName, new AlterTableOptions().addColumn("column-name", type, o))
 
 // Optional Step 5
 // sqlContext.read.options(kuduOptions).kudu.show
