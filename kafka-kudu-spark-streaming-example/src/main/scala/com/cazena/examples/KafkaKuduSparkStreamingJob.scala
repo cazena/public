@@ -31,7 +31,7 @@ object KafkaKuduSparkStreamingJob {
       "group.id"           -> kafkaConsumerGroup,
       "key.deserializer"   -> "org.apache.kafka.common.serialization.StringDeserializer",
       "value.deserializer" -> "org.apache.kafka.common.serialization.StringDeserializer",
-      "security.protocol"  -> "SASL_PLAINTEXT",
+      "security.protocol"  -> "SASL_SSL",
       "sasl.kerberos.service.name" -> "kafka",
       "sasl.mechanism" -> "GSSAPI")
 
