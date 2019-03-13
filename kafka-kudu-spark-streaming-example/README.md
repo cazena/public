@@ -51,4 +51,3 @@
     ```
     select * from traffic_conditions order by as_of_time;
     ```
-
