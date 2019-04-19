@@ -1,18 +1,20 @@
 package com.cazena.examples
 
 import org.apache.kudu.client.CreateTableOptions
-import org.apache.kudu.spark.kudu._
-import org.apache.kudu.spark.kudu.KuduContext
+import org.apache.kudu.spark.kudu.{KuduContext, _}
+import org.apache.log4j.{LogManager, Logger}
 import org.apache.spark.SparkConf
 import org.apache.spark.sql.SparkSession
-import scala.collection.JavaConverters._
 import org.apache.spark.sql.types._
 import org.apache.spark.streaming._
 import org.apache.spark.streaming.kafka010._
 
+import scala.collection.JavaConverters._
 import scala.collection.{Map, Set}
 
 object KafkaKuduSparkStreamingJob {
+  val log:Logger = LogManager.getRootLogger
+
   def main(args: Array[String]) {
 
     val kafkaConsumerGroup = args(0)
@@ -93,6 +95,12 @@ object KafkaKuduSparkStreamingJob {
       resultsDataFrame.createOrReplaceTempView("traffic_results")
       spark.read.options(kuduOptions).kudu.createOrReplaceTempView(kuduTableName)
       spark.sql(s"INSERT INTO TABLE $kuduTableName SELECT * FROM traffic_results")
+    }
+
+    sys.ShutdownHookThread {
+      log.info("Gracefully stopping Spark Streaming Application")
+      ssc.stop(true, true)
+      log.info("Application stopped")
     }
 
     ssc.start()
